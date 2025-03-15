@@ -40,42 +40,47 @@ To enhance prediction accuracy, the following new features were created:
 - `SHOT_ANGLE`: Angle of the shot using atan2(LOC_Y, LOC_X).
 - `SHOT_DISTANCE`: Distance from the basket using the Euclidean distance formula.
 
-data['SHOT_ANGLE'] = np.arctan2(data['LOC_Y'], data['LOC_X'])
-data['SHOT_DISTANCE'] = np.sqrt(data['LOC_X']**2 + data['LOC_Y']**2)
+  ```python
+   data['SHOT_ANGLE'] = np.arctan2(data['LOC_Y'], data['LOC_X'])
+   data['SHOT_DISTANCE'] = np.sqrt(data['LOC_X']**2 + data['LOC_Y']**2)
 
 3. **Fatigue Estimation**
 
 - `FATIGUE`: Estimated using time left in the game.
-
-data['FATIGUE'] = (data['MINS_LEFT'] / 48) + (data['SECS_LEFT'] / 2880)
+  
+   ```python
+   data['FATIGUE'] = (data['MINS_LEFT'] / 48) + (data['SECS_LEFT'] / 2880)
 
 4. **Game Progression**
 
 - `DAY_SINCE_SEASON_START`: Number of days since the start of the season.
-
-data['SEASON_YEAR'] = data['SEASON_2'].str.split('-').str[0].astype(int)
-def get_season_start_date(season_year):
-    return pd.to_datetime(f'{season_year}-10-01')
-data['SEASON_START_DATE'] = data['SEASON_YEAR'].apply(get_season_start_date)
-data['GAME_DATE'] = pd.to_datetime(data['GAME_DATE'])
-data['DAY_SINCE_SEASON_START'] = (data['GAME_DATE'] - data['SEASON_START_DATE']).dt.days
-data.drop(columns=['SEASON_START_DATE', 'SEASON_YEAR'], inplace=True)
+  
+   ```python
+   data['SEASON_YEAR'] = data['SEASON_2'].str.split('-').str[0].astype(int)
+   def get_season_start_date(season_year):
+       return pd.to_datetime(f'{season_year}-10-01')
+   data['SEASON_START_DATE'] = data['SEASON_YEAR'].apply(get_season_start_date)
+   data['GAME_DATE'] = pd.to_datetime(data['GAME_DATE'])
+   data['DAY_SINCE_SEASON_START'] = (data['GAME_DATE'] - data['SEASON_START_DATE']).dt.days
+   data.drop(columns=['SEASON_START_DATE', 'SEASON_YEAR'], inplace=True)
 
 5. **Home Court Advantage**
 
 - `HOME_ADVANTAGE`: 1 if the team was playing at home, 0 otherwise.
 
-data['TEAM_ABBREVIATION'] = data['TEAM_NAME'].map(team_name_to_abbreviation)
-data['HOME_ADVANTAGE'] = (data['TEAM_ABBREVIATION'] == data['HOME_TEAM']).astype(int)
-data.drop(columns=['TEAM_ABBREVIATION'], inplace=True)
+   ```python
+   data['TEAM_ABBREVIATION'] = data['TEAM_NAME'].map(team_name_to_abbreviation)
+   data['HOME_ADVANTAGE'] = (data['TEAM_ABBREVIATION'] == data['HOME_TEAM']).astype(int)
+   data.drop(columns=['TEAM_ABBREVIATION'], inplace=True)
 
 6. **Position-Zone Advantage**
 
  - `POSITION_ZONE_ADVANTAGE`: Average shot success rate for each position-zone combination.
-
-position_zone_success = data.groupby(['POSITION', 'ZONE_NAME'])['SHOT_MADE'].mean().reset_index()
-position_zone_success.rename(columns={'SHOT_MADE': 'POSITION_ZONE_ADVANTAGE'}, inplace=True)
-data = data.merge(position_zone_success, on=['POSITION', 'ZONE_NAME'], how='left')
+ - 
+   ```python
+   position_zone_success = data.groupby(['POSITION', 'ZONE_NAME'])['SHOT_MADE'].mean().reset_index()
+   position_zone_success.rename(columns={'SHOT_MADE': 'POSITION_ZONE_ADVANTAGE'}, inplace=True)
+   data = data.merge(position_zone_success, on=['POSITION', 'ZONE_NAME'], how='left')
 
 🎯 Model & Evaluation
 
