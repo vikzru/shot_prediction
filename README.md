@@ -82,7 +82,7 @@ To enhance prediction accuracy, the following new features were created:
    position_zone_success.rename(columns={'SHOT_MADE': 'POSITION_ZONE_ADVANTAGE'}, inplace=True)
    data = data.merge(position_zone_success, on=['POSITION', 'ZONE_NAME'], how='left')
 
-🎯 Model & Evaluation
+### 🎯 Model & Evaluation
 
 The model selection focused on machine learning algorithms (excluding deep learning).
  - Model Used: XGBoost decision trees.
