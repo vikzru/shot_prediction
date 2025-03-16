@@ -85,11 +85,10 @@ To enhance prediction accuracy, the following new features were created:
 🎯 Model & Evaluation
 
 The model selection focused on machine learning algorithms (excluding deep learning).
+ - Model Used: XGBoost decision trees.
+- Preprocessing: One-hot encoding for categorical variables, scaling numerical features.
+- Hyperparameter Tuning: Grid search and cross-validation for optimal performance.
+- Evaluation Metrics: Accuracy, F1-score, AUC-ROC.
 
-Preprocessing: One-hot encoding for categorical variables, scaling numerical features.
-
-Algorithms Tested: Logistic Regression, Random Forest, Gradient Boosting, etc.
-
-Evaluation Metric: Accuracy, F1-score
 
 📉 Detailed model selection process and performance results will be included in the report.
